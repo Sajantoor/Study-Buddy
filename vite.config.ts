@@ -11,6 +11,11 @@ export default defineConfig({
                     src: "public/manifest.json",
                     dest: ".",
                 },
+                // TODO: This is a hacky fix for now, instead copy it properly
+                {
+                    src: "src/overlay/overlay.css",
+                    dest: "overlay",
+                },
             ],
         }),
     ],
@@ -20,13 +25,19 @@ export default defineConfig({
             input: {
                 main: "./index.html",
                 background: "./src/background.ts",
+                overlay: "./src/overlay/main.tsx",
             },
             output: {
                 entryFileNames: (chunkInfo) => {
-                    if (chunkInfo.name === 'background') {
-                        return 'background.js';
+                    if (chunkInfo.name === "background") {
+                        return "background.js";
                     }
-                    return '[name].js';
+
+                    if (chunkInfo.name === "overlay") {
+                        return "overlay/[name].js";
+                    }
+
+                    return "[name].js";
                 },
             },
         },

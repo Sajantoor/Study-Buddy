@@ -19,5 +19,16 @@
   "host_permissions": [
     "http://*/*",
     "https://*/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "overlay/*.*",
+        "assets/*.*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
   ]
 }

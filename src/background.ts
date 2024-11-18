@@ -1,6 +1,7 @@
 console.log("running background script");
 
 const GENERATE_AI_NOTES = "generate-ai-notes";
+// Contains randomized string to avoid conflicts with other pages or extensions
 
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
@@ -19,34 +20,37 @@ chrome.runtime.onInstalled.addListener(() => {
                 target: { tabId: tab!.id! },
                 args: [info.selectionText!],
                 func: async (selectedText: string) => {
-                    console.log("Generating notes for:", selectedText);
+                    const ROOT_ID = "root_ext_study_buddy";
+                    console.log(ROOT_ID);
+                    console.log(selectedText);
 
-                    const tooltip = document.createElement("div");
-                    tooltip.style.position = "fixed";
-                    tooltip.style.maxWidth = "300px";
-                    tooltip.style.top = "10px";
-                    tooltip.style.right = "10px";
-                    tooltip.style.backgroundColor = "#282c34";
-                    tooltip.style.color = "#61dafb";
-                    tooltip.style.borderRadius = "5px";
-                    tooltip.style.padding = "10px 20px";
-                    tooltip.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)";
-                    tooltip.style.fontFamily = "Arial, sans-serif";
+                    // check if the tab's document has the root element
+                    if (document.getElementById(ROOT_ID)) {
+                        console.log(
+                            "Found existing overlay, skipping creation"
+                        );
+                        return;
+                    } else {
+                        console.log("Creating overlay");
+                        const overlay = document.createElement("div");
+                        overlay.id = ROOT_ID;
+                        document.body.appendChild(overlay);
+                        console.log("Appended overlay to body");
+                        const OVERLAY_SRC = "overlay/overlay.js";
+                        const src = chrome.runtime.getURL(OVERLAY_SRC);
+                        console.log("Overlay src:", src);
+                        await import(src);
+                    }
 
-                    document.body.appendChild(tooltip);
-                    tooltip.innerText = "🤖 Generating AI notes...";
-                    tooltip.style.zIndex = "1000";
-                    tooltip.style.fontSize = "14px";
+                    //     const summarizer = await window.ai.summarizer.create({
+                    //         type: "key-points",
+                    //         length: "short",
+                    //         format: "plain-text",
+                    //         sharedContext: "Generate notes for students",
+                    //     });
 
-                    const summarizer = await window.ai.summarizer.create({
-                        type: "key-points",
-                        length: "short",
-                        format: "plain-text",
-                        sharedContext: "Generate notes for students",
-                    });
-
-                    const result = await summarizer.summarize(selectedText);
-                    tooltip.innerText = result;
+                    // const result = await summarizer.summarize(selectedText);
+                    // tooltip.innerText = result;
                 },
             });
         }
