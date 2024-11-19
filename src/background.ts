@@ -19,38 +19,29 @@ chrome.runtime.onInstalled.addListener(() => {
             chrome.scripting.executeScript<string[], void>({
                 target: { tabId: tab!.id! },
                 args: [info.selectionText!],
-                func: async (selectedText: string) => {
+                func: async (selectedText) => {
                     const ROOT_ID = "root_ext_study_buddy";
-                    console.log(ROOT_ID);
-                    console.log(selectedText);
 
                     // check if the tab's document has the root element
-                    if (document.getElementById(ROOT_ID)) {
-                        console.log(
-                            "Found existing overlay, skipping creation"
-                        );
-                        return;
-                    } else {
-                        console.log("Creating overlay");
+                    if (!document.getElementById(ROOT_ID)) {
                         const overlay = document.createElement("div");
                         overlay.id = ROOT_ID;
                         document.body.appendChild(overlay);
-                        console.log("Appended overlay to body");
                         const OVERLAY_SRC = "overlay/overlay.js";
                         const src = chrome.runtime.getURL(OVERLAY_SRC);
-                        console.log("Overlay src:", src);
                         await import(src);
                     }
 
-                    //     const summarizer = await window.ai.summarizer.create({
-                    //         type: "key-points",
-                    //         length: "short",
-                    //         format: "plain-text",
-                    //         sharedContext: "Generate notes for students",
-                    //     });
-
-                    // const result = await summarizer.summarize(selectedText);
-                    // tooltip.innerText = result;
+                    // TODO: Probably use chrome.runtime.sendMessage instead
+                    // but that wasn't working so I used this for now as a
+                    // temporary solution
+                    window.postMessage(
+                        {
+                            type: "generate-notes",
+                            data: selectedText,
+                        },
+                        "*"
+                    );
                 },
             });
         }
