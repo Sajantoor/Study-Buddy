@@ -45,6 +45,23 @@ function App() {
         console.log(response);
     }
 
+    async function handleSave() {
+        const note = {
+            content: content,
+            url: window.location.href,
+        };
+
+        const notes = await chrome.storage.local.get("notes");
+        console.log(notes);
+
+        if (!notes || Object.keys(notes).length === 0) {
+            await chrome.storage.local.set({ notes: [note] });
+        } else {
+            const updatedNotes = [...notes.notes, note];
+            await chrome.storage.local.set({ notes: updatedNotes });
+        }
+    }
+
     return (
         <div style={{ display: visible ? "block" : "none" }}>
             <button onClick={() => setVisible(!visible)}>X</button>
@@ -63,6 +80,8 @@ function App() {
                     }
                 }}
             />
+
+            <button onClick={() => handleSave()}>Save</button>
         </div>
     );
 }
