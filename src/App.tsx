@@ -25,7 +25,7 @@ function App() {
 
     return (
         <>
-            <h1>Your Notes</h1>
+            <h1 className="text-3xl font-bold underline">Your Notes</h1>
             {notes.map((note, index) => (
                 <Note key={index} content={note.content} url={note.url} />
             ))}

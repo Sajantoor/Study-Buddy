@@ -64,6 +64,7 @@ function App() {
 
     return (
         <div style={{ display: visible ? "block" : "none" }}>
+            <h1 className="text-3xl caret-emerald-950 float-right">Test</h1>
             <button onClick={() => setVisible(!visible)}>X</button>
             <div>
                 {content.split("\n").map((line, index) => (
