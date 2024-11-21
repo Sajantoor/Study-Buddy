@@ -1,35 +1,43 @@
 {
-  "name": "chrome-extension-react-template",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "chrome-ai-extension",
+  "displayName": "Chrome ai extension",
+  "version": "0.0.1",
+  "description": "A basic Plasmo extension.",
+  "author": "Sajan Toor",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "dev": "plasmo dev",
+    "build": "plasmo build",
+    "package": "plasmo package"
   },
   "dependencies": {
+    "@plasmohq/messaging": "^0.6.2",
     "@types/dom-chromium-ai": "^0.0.2",
-    "chrome-extension-react-template": "file:",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "chrome-ai-extension": "file:",
+    "plasmo": "0.89.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tailwindcss": "3.4.1"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.281",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^7.13.1",
-    "@typescript-eslint/parser": "^7.13.1",
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.7",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.15",
-    "typescript": "^5.2.2",
-    "vite": "^5.3.1",
-    "vite-plugin-static-copy": "^1.0.6"
+    "@ianvs/prettier-plugin-sort-imports": "4.1.1",
+    "@types/chrome": "0.0.258",
+    "@types/node": "20.11.5",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
+    "postcss": "8.4.33",
+    "prettier": "3.2.4",
+    "typescript": "5.3.3"
+  },
+  "manifest": {
+    "host_permissions": [
+      "https://*/*"
+    ],
+    "permissions": [
+      "contextMenus",
+      "scripting",
+      "storage",
+      "activeTab",
+      "tabs"
+    ]
   }
 }

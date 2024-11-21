@@ -1,49 +1,33 @@
-# Study Buddy Chrome Extension
+This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
 
-Project for the [Google Chrome Built-in AI Challenge Hackathon](https://googlechromeai.devpost.com/).
+## Getting Started
 
-## 🏗️ Development
+First, run the development server:
 
-Install the dependencies:
-
-    ```sh
-    npm install
-    ```
-
-To start the development server:
-
-```sh
+```bash
+pnpm dev
+# or
 npm run dev
 ```
 
-This will start the Vite development server and open your default browser.
+Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
 
-## 📦 Build
+You can start editing the popup by modifying `popup.tsx`. It should auto-update as you make changes. To add an options page, simply add a `options.tsx` file to the root of the project, with a react component default exported. Likewise to add a content page, add a `content.ts` file to the root of the project, importing some module and do some logic, then reload the extension on your browser.
 
-To create a production build:
+For further guidance, [visit our Documentation](https://docs.plasmo.com/)
 
-```sh
+## Making production build
+
+Run the following:
+
+```bash
+pnpm build
+# or
 npm run build
 ```
 
-This will generate the build files in the `build` directory.
+This should create a production bundle for your extension, ready to be zipped and published to the stores.
 
-## 📂 Load Extension in Chrome
+## Submit to the webstores
 
-1. Open Chrome and navigate to `chrome://extensions/`.
-2. Enable "Developer mode" using the toggle switch in the top right corner.
-3. Click "Load unpacked" and select the `build` directory.
-
-Your React app should now be loaded as a Chrome extension!
-
-## 🗂️ Project Structure
-
--   `public/`: Contains static files and the `manifest.json`.
--   `src/`: Contains the React app source code.
--   `vite.config.ts`: Vite configuration file.
--   `tsconfig.json`: TypeScript configuration file.
--   `package.json`: Contains the project dependencies and scripts.
-
-## License
-
-This project is licensed under the MIT License.
+The easiest way to deploy your Plasmo extension is to use the built-in [bpp](https://bpp.browser.market) GitHub action. Prior to using this action however, make sure to build your extension and upload the first version to the store to establish the basic credentials. Then, simply follow [this setup instruction](https://docs.plasmo.com/framework/workflows/submit) and you should be on your way for automated submission!
