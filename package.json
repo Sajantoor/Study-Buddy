@@ -10,9 +10,13 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@chakra-ui/react": "^3.2.0",
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
     "@plasmohq/messaging": "^0.6.2",
     "@types/dom-chromium-ai": "^0.0.2",
     "chrome-ai-extension": "file:",
+    "framer-motion": "^11.11.17",
     "plasmo": "0.89.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",

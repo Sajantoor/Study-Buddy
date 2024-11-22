@@ -17,7 +17,11 @@ chrome.runtime.onInstalled.addListener(() => {
     if (info.menuItemId === GENERATE_AI_NOTES) {
       chrome.sidePanel.open({ tabId: tab!.id! });
       const selectedText = info.selectionText;
-      const message = { type: "generate-notes", selectedText } as Message;
+      const message = {
+        type: "generate-notes",
+        selectedText: selectedText,
+        url: tab.url,
+      } as Message;
 
       // TODO: this is a hack to wait for the side panel to open and use effect
       // to be called
