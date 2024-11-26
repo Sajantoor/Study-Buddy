@@ -1,27 +1,21 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
-import type { Note as INote } from "~utils/types";
-
-function Note({ content, url }: INote) {
+function Note({ content, url }: { content: string; url?: string }) {
   return (
-    <div
-      className="note"
-      style={{
-        border: "1px solid #ccc",
-        padding: "10px",
-        borderRadius: "5px",
-        margin: "10px 0",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-      }}>
-      <p style={{ margin: "0 0 10px" }}>{content}</p>
-      <a
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: "#007bff", textDecoration: "none" }}>
-        {url}
-      </a>
-    </div>
+    <Box
+      p={2}
+      mb={4}
+      bgColor="gray.700"
+      minH="50px"
+      borderRadius="md"
+      overflowY="auto">
+      <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]}>
+        {content}
+      </ReactMarkdown>
+    </Box>
   );
 }
 

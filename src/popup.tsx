@@ -1,3 +1,4 @@
+import { Box, ChakraProvider, defaultSystem, Heading } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import Note from "~components/Note";
@@ -25,12 +26,22 @@ function IndexPopup() {
 
   return (
     <>
-      <div className="plasmo-p-5">
-        <h1 className="text-3xl font-bold underline">Your Notes</h1>
-        {notes.map((note, index) => (
-          <Note key={index} content={note.content} url={note.url} />
-        ))}
-      </div>
+      <ChakraProvider value={defaultSystem}>
+        <Box
+          maxH="20rem"
+          w="500px"
+          overflowY="auto"
+          bgColor="gray.800"
+          color="white"
+          p={4}>
+          <Heading as="h1" size="lg" mb={2}>
+            Your Notes
+          </Heading>
+          {notes.map((note, index) => (
+            <Note key={index} content={note.content} url={note.url} />
+          ))}
+        </Box>
+      </ChakraProvider>
     </>
   );
 }

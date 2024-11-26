@@ -9,11 +9,11 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+
+import Note from "~components/Note";
+import type { Message } from "~utils/types";
 
 import "~style.css";
-
-import type { Message } from "~utils/types";
 
 function IndexSidePanel() {
   const [content, setContent] = useState("");
@@ -69,7 +69,6 @@ function IndexSidePanel() {
     };
 
     const notes = await chrome.storage.local.get("notes");
-    console.log(notes);
 
     if (!notes || Object.keys(notes).length === 0) {
       await chrome.storage.local.set({ notes: [note] });
@@ -111,17 +110,7 @@ function IndexSidePanel() {
         <Heading mb={4} size="md" color="teal.300">
           AI Notes
         </Heading>
-        <Box
-          p={2}
-          mb={4}
-          bgColor="gray.700"
-          borderRadius="md"
-          minH="100px"
-          overflowY="auto">
-          <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]}>
-            {content}
-          </ReactMarkdown>
-        </Box>
+        <Note content={content} />
         <Button
           bgColor={isGenerated ? "blue.500" : "gray.500"}
           colorScheme="dark"
