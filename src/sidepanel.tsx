@@ -5,9 +5,11 @@ import {
   defaultSystem,
   Heading,
   Input,
-  Text,
+  Spacer,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 import "~style.css";
 
@@ -19,6 +21,8 @@ function IndexSidePanel() {
   const [userPrompt, setUserPrompt] = useState("");
   const [prompter, setPrompter] = useState<AILanguageModel>();
   const [summarizer, setSummarizer] = useState<AISummarizer>();
+  const [chatMessages, setChatMessages] = useState<string[]>([]);
+  const [isGenerated, setIsGenerated] = useState(false);
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener((message: Message) => {
@@ -39,23 +43,22 @@ function IndexSidePanel() {
       model = await window.ai.summarizer.create({
         type: "key-points",
         length: "short",
-        format: "plain-text",
+        format: "markdown",
         sharedContext: "Generate notes for students", // TODO: Update this prompt
       });
 
       setSummarizer(model);
     }
 
-    const stream = model.summarize(text);
+    const stream = model.summarizeStreaming(text);
 
-    let result = "";
     // @ts-ignore types seem to be wrong
     for await (const chunk of stream) {
-      result += chunk;
-      setContent(result);
+      setContent(chunk);
+      console.log(chunk);
     }
 
-    setContent(result);
+    setIsGenerated(true);
   }
 
   async function handleSave() {
@@ -78,8 +81,11 @@ function IndexSidePanel() {
 
   const askAi = async () => {
     let session = prompter;
+    setChatMessages([...chatMessages, `You: ${userPrompt}`]);
+    setUserPrompt("");
 
     if (!session) {
+      console.log("Creating new session");
       session = await window.ai.languageModel.create({
         systemPrompt:
           "You are helping the user understand the content of the page. Answer their questions regarding the content of the page, if you do not know say so:",
@@ -90,7 +96,13 @@ function IndexSidePanel() {
     }
 
     const result = await session.prompt(userPrompt);
-    setContent(result);
+    setChatMessages([...chatMessages, `AI: ${result}`]);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      askAi();
+    }
   };
 
   return (
@@ -100,37 +112,71 @@ function IndexSidePanel() {
           AI Notes
         </Heading>
         <Box
-          p={4}
+          p={2}
           mb={4}
           bgColor="gray.700"
           borderRadius="md"
-          h="60vh"
+          minH="100px"
           overflowY="auto">
-          <Text whiteSpace="pre-wrap">{content}</Text>
+          <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]}>
+            {content}
+          </ReactMarkdown>
         </Box>
         <Button
-          bgColor="blue.500"
+          bgColor={isGenerated ? "blue.500" : "gray.500"}
           colorScheme="dark"
-          onClick={() => handleSave()}
+          onClick={() => {
+            if (isGenerated) {
+              handleSave();
+            }
+          }}
           w="full"
           mb={4}>
           Save Note
         </Button>
-        <Box display="flex">
-          <Input
-            placeholder="Ask something..."
-            value={userPrompt}
-            onChange={(e) => setUserPrompt(e.target.value)}
-            bgColor="gray.600"
-            borderColor="gray.500"
-            p={2}
-            flex="1"
-            mr={2}
-          />
-          <Button bgColor="blue.500" colorScheme="dark" onClick={() => askAi()}>
-            Ask
-          </Button>
+        <Spacer />
+        <Box
+          p={4}
+          mb={4}
+          borderRadius="md"
+          flex="1"
+          maxH="50%" // TODO: Needs to be adjusted
+          overflowY="auto">
+          {chatMessages.map((msg, index) => (
+            <ReactMarkdown key={index} className="markdown">
+              {msg}
+            </ReactMarkdown>
+          ))}
         </Box>
+
+        {isGenerated && (
+          <Box
+            display="flex"
+            position="absolute"
+            bottom="0"
+            left="0"
+            right="0"
+            p={5}
+            bgColor="gray.800">
+            <Input
+              placeholder="Ask something..."
+              value={userPrompt}
+              onChange={(e) => setUserPrompt(e.target.value)}
+              onKeyDown={handleKeyDown}
+              bgColor="gray.600"
+              borderColor="gray.500"
+              p={2}
+              flex="1"
+              mr={2}
+            />
+            <Button
+              bgColor="blue.500"
+              colorScheme="dark"
+              onClick={() => askAi()}>
+              Ask
+            </Button>
+          </Box>
+        )}
       </Box>
     </ChakraProvider>
   );
