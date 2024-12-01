@@ -3,7 +3,15 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-function Note({ content, url }: { content: string; url?: string }) {
+function Note({
+  content,
+  url,
+  onClick,
+}: {
+  content: string;
+  url?: string;
+  onClick?: () => void;
+}) {
   return (
     <Box
       p={2}
@@ -11,7 +19,8 @@ function Note({ content, url }: { content: string; url?: string }) {
       bgColor="gray.700"
       minH="50px"
       borderRadius="md"
-      overflowY="auto">
+      overflowY="auto"
+      onClick={onClick}>
       <ReactMarkdown className="markdown" remarkPlugins={[remarkGfm]}>
         {content}
       </ReactMarkdown>
