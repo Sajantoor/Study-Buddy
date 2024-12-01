@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  color: #ffffff;
+  background-color: #27272a;
+}
+
 .markdown > * {
   all: revert;
 }

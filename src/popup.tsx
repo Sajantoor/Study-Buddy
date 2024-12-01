@@ -1,4 +1,4 @@
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { Box, ChakraProvider, defaultSystem } from "@chakra-ui/react";
 
 import NotesPage from "~views/NotesPage";
 
@@ -8,7 +8,9 @@ function IndexPopup() {
   return (
     <>
       <ChakraProvider value={defaultSystem}>
-        <NotesPage />
+        <Box maxH="20rem" w="500px" overflowY="auto">
+          <NotesPage />
+        </Box>
       </ChakraProvider>
     </>
   );

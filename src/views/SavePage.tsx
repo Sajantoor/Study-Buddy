@@ -1,4 +1,4 @@
-import { Button, Heading } from "@chakra-ui/react";
+import { Box, Button, Heading } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -52,9 +52,8 @@ function SavePage() {
   };
 
   return (
-    <>
-      <Heading> Save Your Note! </Heading>
-
+    <Box p={4}>
+      <Heading color="teal.300"> Click to add to an existing note! </Heading>
       {notes.map((note, index) => (
         <Note
           onClick={() => updateNote(index)}
@@ -63,9 +62,20 @@ function SavePage() {
           url={note.url}
         />
       ))}
-
-      <Button onClick={() => saveNote()}>Create New Note</Button>
-    </>
+      <Button
+        position="fixed"
+        bottom="20px"
+        right="20px"
+        borderRadius="50%"
+        width="50px"
+        height="50px"
+        fontSize="24px"
+        backgroundColor="teal.300"
+        color="black"
+        onClick={() => saveNote()}>
+        +
+      </Button>{" "}
+    </Box>
   );
 }
 
