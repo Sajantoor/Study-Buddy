@@ -4,6 +4,12 @@ Study Buddy AI is a Chrome extension that helps you study more effectively. It
 uses AI to help you generate notes from text and helps answer any questions
 you have.
 
+## Demo
+
+Check out our demo video on YouTube
+
+[![Study Buddy AI Demo](https://img.youtube.com/vi/MU-5DV-I_3I/0.jpg)](https://www.youtube.com/watch?v=MU-5DV-I_3I)
+
 ## Getting Started
 
 First, run the development server:
