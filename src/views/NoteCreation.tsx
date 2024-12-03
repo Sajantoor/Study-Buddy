@@ -137,7 +137,7 @@ function NoteCreation() {
       <Heading mb={4} size="md" color="teal.300">
         Generating Notes with AI
       </Heading>
-      <Note content={content} />
+      <Note content={content} canDelete={false} />
       <Button
         bgColor={isGenerated ? "blue.500" : "gray.500"}
         colorScheme="dark"

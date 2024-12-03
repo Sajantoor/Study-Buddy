@@ -9,10 +9,12 @@ function Note({
   content,
   url,
   onClick,
+  canDelete = true,
 }: {
   content: string;
   url?: string;
   onClick?: () => void;
+  canDelete?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
   const [hovering, setHovering] = useState(false);
@@ -74,7 +76,7 @@ function Note({
       <Box
         position="relative"
         float="right"
-        display={hovering ? "block" : "none"}
+        display={hovering && canDelete ? "block" : "none"}
         onClick={(e) => {
           e.stopPropagation();
           deleteNote();
