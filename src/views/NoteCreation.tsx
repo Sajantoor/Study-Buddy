@@ -37,6 +37,12 @@ function NoteCreation() {
     let model = summarizer;
 
     if (!model) {
+      if ((await window.ai.summarizer.capabilities()).available != "readily") {
+        setContent(
+          "The AI model needed to generate notes is not available. Please try again later.",
+        );
+      }
+
       model = await window.ai.summarizer.create({
         type: "key-points",
         length: "short",
@@ -47,14 +53,18 @@ function NoteCreation() {
       setSummarizer(model);
     }
 
-    const stream = model.summarizeStreaming(text);
+    try {
+      const stream = model.summarizeStreaming(text);
+      // @ts-ignore types seem to be wrong
+      for await (const chunk of stream) {
+        setContent(chunk);
+      }
 
-    // @ts-ignore types seem to be wrong
-    for await (const chunk of stream) {
-      setContent(chunk);
+      setIsGenerated(true);
+    } catch (e) {
+      console.error(e);
+      setContent("Failed to generate notes. Please try again.");
     }
-
-    setIsGenerated(true);
   }
 
   async function handleSave() {
@@ -80,13 +90,25 @@ function NoteCreation() {
       });
 
       setPrompter(session);
-      await session.prompt("Here is the provided context: " + context);
+      try {
+        await session.prompt("Here is the provided context: " + context);
+      } catch (e) {
+        console.error(e);
+      }
     }
 
-    const result = session.promptStreaming(userPrompt);
-    // @ts-ignore types seem to be wrong
-    for await (const chunk of result) {
-      setChatMessages([...messages, `AI: ${chunk}`]);
+    try {
+      const result = session.promptStreaming(userPrompt);
+      // @ts-ignore types seem to be wrong
+      for await (const chunk of result) {
+        setChatMessages([...messages, `AI: ${chunk}`]);
+      }
+    } catch (e) {
+      console.error(e);
+      setChatMessages([
+        ...messages,
+        "AI: I encountered an error while processing your request. Please try again.",
+      ]);
     }
   };
 
