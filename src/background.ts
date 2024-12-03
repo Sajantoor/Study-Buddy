@@ -28,7 +28,7 @@ chrome.runtime.onInstalled.addListener(() => {
       // wait 1 second before sending the message
       setTimeout(() => {
         chrome.runtime.sendMessage(message);
-      }, 1000);
+      }, 2000);
     }
   });
 });

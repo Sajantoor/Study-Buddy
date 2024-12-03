@@ -18,12 +18,14 @@ function NoteCreation() {
   const [summarizer, setSummarizer] = useState<AISummarizer>();
   const [chatMessages, setChatMessages] = useState<string[]>([]);
   const [isGenerated, setIsGenerated] = useState(false);
+  const [currentUrl, setCurrentUrl] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     chrome.runtime.onMessage.addListener((message: Message) => {
       if (message.type == "generate-notes") {
         generateNotes(message.selectedText);
+        setCurrentUrl(message.url);
       }
     });
   }, []);
@@ -58,8 +60,7 @@ function NoteCreation() {
   async function handleSave() {
     const note = {
       content: content,
-      // TODO: get url from the tab
-      url: "https://www.example.com",
+      url: currentUrl,
     };
 
     // redirect to save page with note data
@@ -82,8 +83,11 @@ function NoteCreation() {
       await session.prompt("Here is the provided context: " + context);
     }
 
-    const result = await session.prompt(userPrompt);
-    setChatMessages([...messages, `AI: ${result}`]);
+    const result = session.promptStreaming(userPrompt);
+    // @ts-ignore types seem to be wrong
+    for await (const chunk of result) {
+      setChatMessages([...messages, `AI: ${chunk}`]);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
