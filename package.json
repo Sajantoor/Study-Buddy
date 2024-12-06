@@ -1,8 +1,8 @@
 {
-  "name": "chrome-ai-extension",
-  "displayName": "Chrome ai extension",
+  "name": "study-buddy-ai",
+  "displayName": "Study Buddy AI",
   "version": "0.0.1",
-  "description": "A basic Plasmo extension.",
+  "description": "A Chrome Extension that helps you study using the power of AI!",
   "author": "Sajan Toor",
   "scripts": {
     "dev": "plasmo dev",
@@ -11,8 +11,6 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^3.2.0",
-    "@emotion/react": "^11.13.5",
-    "@emotion/styled": "^11.13.5",
     "@plasmohq/messaging": "^0.6.2",
     "@types/dom-chromium-ai": "^0.0.2",
     "chrome-ai-extension": "file:",
@@ -23,6 +21,8 @@
     "react-markdown": "8.0.6",
     "react-router-dom": "^7.0.1",
     "remark-gfm": "^4.0.0",
+    "study-buddy": "file:",
+    "study-buddy-ai": "file:",
     "tailwindcss": "3.4.1"
   },
   "devDependencies": {
